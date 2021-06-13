@@ -1,122 +1,81 @@
 package services;
 
-@ServiceDomain("${trello}")
-@QueryParameter(name = "key", value = "3445103a21ddca2619eaceb0e833d0db")
-@QueryParameter(name = "token", value = "a9b951262e529821308e7ecbc3e4b7cfb14a24fef5ea500a68c69d374009fcc0")
-public class TrelloService {
-    public static final String BOARDS = "/boards";
+import dataproviders.ParamNames;
+import io.restassured.RestAssured;
+import io.restassured.http.Method;
+import io.restassured.response.Response;
+import services.interfaces.ITrelloClass;
+import tobjects.Board;
 
-    @ContentType(JSON)
-    @GET(BOARDS)
-    public static RestMethod boardsGet;
+import java.util.HashMap;
+import java.util.Map;
 
-    @ContentType(JSON)
-    @POST(BOARDS)
-    public static RestDataMethod<Board> boardsPost;
+public class TrelloService implements ITrelloClass<Board> {
 
-    public static synchronized Board createBoard(Board board) {
-        return boardsPost.postAsData(board);
+    private Method requestMethod;
+
+    //BEGINNING OF BUILDER PATTERN
+    private String cUrl;
+
+    private TrelloService(Method method, String cUrl) {
+
+        this.requestMethod = method;
+        this.cUrl = cUrl;
     }
 
-    @ContentType(JSON)
-    @GET("/boards/{board_id}")
-    public static RestMethod getBoardById;
-
-    @ContentType(JSON)
-    @GET("/boards/{board_id}")
-    public RestMethod boardId;
-
-    public static Board getBoard(String boardId) {
-        return getBoardById.call(pathParams().add("board_id", boardId)).getRaResponse().as(Board.class);
+    public static ApiRequestBuilder requestBuilder() {
+        return new ApiRequestBuilder();
     }
 
-    @ContentType(JSON)
-    @GET("/boards/{board_id}/cards/{short_card_id}")
-    public static RestMethod getBoardCardById;
+    public static class ApiRequestBuilder {
+        private Method requestMethod = Method.GET;
+        private String cUrl = "";
 
-    @ContentType(JSON)
-    @GET("/members/{user_name}/boards")
-    public static RestMethod getAllMemberBoards;
+        public ApiRequestBuilder setMethod (Method method){
+            requestMethod = method;
+            return this;
+        }
 
-    @ContentType(JSON)
-    @GET("/members")
-    public static RestMethod membersGet;
 
-    @GET("/members/me")
-    public static RestMethod membersMeGet;
+        public ApiRequestBuilder setBaseUrl(String url) {
+            cUrl.concat(url);
+            return this;
+        }
 
-    @ContentType(JSON)
-    @DELETE("/cards")
-    public static RestMethod deleteACardFromBoard;
+        public ApRequestBuilder setAllBoards(String url) {
+            parameters.put(ParamNames.GET_ALL_BOARDS, url);
+            cUrl.concat(url);
+            return this;
+        }
 
-    @ContentType(JSON)
-    @POST("/cards")
-    public static RestMethod addNewCardToBoard;
+        public ApiRequestBuilder setOneBoard(String url) {
+            parameters.put(ParamNames.GET_ONE_BOARD, url);
+            cUrl.concat(url);
+            return this;
+        }
 
-    public static Card addNewCardToBoard(Card card) {
-        return addNewCardToBoard.body(card).callAsData(Card.class);
+        public ApiRequestBuilder setKey(String key) {
+            parameters.put(ParamNames.KEY, key);
+            cUrl.concat(key);
+            return this;
+        }
+
+        public ApiRequestBuilder setToken(String token) {
+            parameters.put(ParamNames.TOKEN, token);
+            cUrl.concat(token);
+            return this;
+        }
+
+        public TrelloService buildRequest() {
+            return new TrelloService(requestMethod, cUrl);
+        }
     }
+    //ENDING OF BUILDER PATTERN
 
-    @ContentType(JSON)
-    @GET("/cards/{id}/board")
-    public static RestMethod getCardBoard;
 
-    public static Board getCardBoard(String cardId) {
-        return getCardBoard.call(pathParams().add("id", cardId)).getRaResponse().as(Board.class);
-    }
-
-    @ContentType(JSON)
-    @GET("/boards/{board_id}/cards")
-    public static RestMethod getBoardCardsList;
-
-    @ContentType(JSON)
-    @POST("/lists")
-    public static RestMethod createList;
-
-    public static synchronized TrelloList createList(TrelloList list) {
-        return createList.post(list, TrelloList.class);
-    }
-
-    @ContentType(JSON)
-    @POST("/cards/{card_id}/actions/comments")
-    public static RestMethod postNewCommentToCard;
-
-    @QueryParameter(name = "test", value = "test")
-    @ContentType(JSON)
-    @GET("/cards/{card_id}")
-    public static RestMethod getCardByUniqueId;
-
-    @ContentType(JSON)
-    @POST("/organizations")
-    public static RestMethod createOrganization;
-
-    public static Organization createOrganization(Organization organization) {
-        return createOrganization.post(organization, Organization.class);
-    }
-
-    @ContentType(JSON)
-    @GET("/organizations/{id}/boards")
-    public static RestMethod getOrganizationBoards;
-
-    public static List<Board> getOrganizationBoards(String orgId) {
-        return asList(getOrganizationBoards
-                .call(pathParams().add("id", orgId))
-                .getRaResponse()
-                .as(Board[].class));
-    }
-
-    @ContentType(JSON)
-    @DELETE("/boards/{board_id}")
-    public static RestMethod deleteBoard;
-    @ContentType(JSON)
-    @DELETE("/organizations/{org_id}")
-    public static RestMethod deleteOrg;
-
-    public static RestResponse deleteBoard(String boardId) {
-        return deleteBoard.call(pathParams().add("board_id", boardId));
-    }
-
-    public static RestResponse deleteOrg(String orgId) {
-        return deleteOrg.call(pathParams().add("org_id", orgId));
+    public Response sendRequest() {
+        return RestAssured
+                .request(requestMethod , cUrl)
+                .prettyPeek();
     }
 }
