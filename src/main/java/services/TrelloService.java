@@ -15,12 +15,12 @@ public class TrelloService implements ITrelloClass<Board> {
     private Method requestMethod;
 
     //BEGINNING OF BUILDER PATTERN
+    private Map<String, String> mapUrl;
     private String cUrl;
 
-    private TrelloService(Method method, String cUrl) {
-
+    private TrelloService(Method method, Map<String, String> parameters) {
+        this.mapUrl = parameters;
         this.requestMethod = method;
-        this.cUrl = cUrl;
     }
 
     public static ApiRequestBuilder requestBuilder() {
@@ -28,8 +28,8 @@ public class TrelloService implements ITrelloClass<Board> {
     }
 
     public static class ApiRequestBuilder {
+        private Map<String, String> parameters = new HashMap<>();
         private Method requestMethod = Method.GET;
-        private String cUrl = "";
 
         public ApiRequestBuilder setMethod (Method method){
             requestMethod = method;
@@ -38,36 +38,36 @@ public class TrelloService implements ITrelloClass<Board> {
 
 
         public ApiRequestBuilder setBaseUrl(String url) {
-            cUrl.concat(url);
+            parameters.put(ParamNames.BASE_URL, url);
             return this;
         }
 
-        public ApRequestBuilder setAllBoards(String url) {
+        public ApiRequestBuilder setAllBoards(String url) {
+            //if (url.isEmpty()) {parameters.put(ParamNames.GET_ALL_BOARDS, ParamNames.GET_ALL_BOARDS);}
             parameters.put(ParamNames.GET_ALL_BOARDS, url);
-            cUrl.concat(url);
             return this;
         }
 
         public ApiRequestBuilder setOneBoard(String url) {
+            //if (url.isEmpty()) {parameters.put(ParamNames.GET_ONE_BOARD, ParamNames.GET_ONE_BOARD);}
             parameters.put(ParamNames.GET_ONE_BOARD, url);
-            cUrl.concat(url);
             return this;
         }
 
         public ApiRequestBuilder setKey(String key) {
+            //if (url.isEmpty()) {parameters.put(ParamNames.GET_ONE_BOARD, ParamNames.GET_ONE_BOARD);}
             parameters.put(ParamNames.KEY, key);
-            cUrl.concat(key);
             return this;
         }
 
         public ApiRequestBuilder setToken(String token) {
+            //if (url.isEmpty()) {parameters.put(ParamNames.GET_ONE_BOARD, ParamNames.GET_ONE_BOARD);}
             parameters.put(ParamNames.TOKEN, token);
-            cUrl.concat(token);
             return this;
         }
 
         public TrelloService buildRequest() {
-            return new TrelloService(requestMethod, cUrl);
+            return new TrelloService(requestMethod, parameters);
         }
     }
     //ENDING OF BUILDER PATTERN
