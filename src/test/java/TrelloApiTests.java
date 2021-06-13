@@ -7,6 +7,7 @@ public class TrelloApiTests {
 
     @Test
     public void sendRequestAllBoards() {
+        System.out.println(Method.GET);
         RestAssured
                 .request(Method.GET ,"https://api.trello.com/1/members/me/boards?key=15836217fb4d85ab9cd36070535d80ad&token=81c5a186bf748c41b18f0083ab281febea2cdb6a0bd35131f0a4f4e1378269c4")
                 .prettyPeek();

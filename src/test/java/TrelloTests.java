@@ -1,11 +1,32 @@
+import providers.Dp;
+import io.restassured.http.Method;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import services.TrelloService;
 import tobjects.Board;
 
+import java.util.List;
+
+import static services.TrelloService.getAllBoards;
+import static services.TrelloService.requestBuilder;
+
 public class TrelloTests {
-    private String createdBoardId, createdBoardId2, createdOrgId;
+
+    @Test
+    public void checkMisspelledTexts() {
+
+        List<Board> result = getAllBoards(
+                requestBuilder()
+                        .setMethod(Method.GET)
+                        .setBaseUrl(Dp.getProperty("pathToTrello"))
+                        .setAllBoards(Dp.getProperty("allBoards"))
+                        .setKey(Dp.getProperty("key"))
+                        .setToken(Dp.getProperty("token"))
+                        .buildRequest()
+                        .sendRequest());
+
+    }
+
 
     @BeforeClass
     public void initService() {

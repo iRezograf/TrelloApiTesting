@@ -1,17 +1,21 @@
 package services;
 
-import dataproviders.ParamNames;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.restassured.RestAssured;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import services.interfaces.ITrelloClass;
 import tobjects.Board;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 
 public class TrelloService implements ITrelloClass<Board> {
 
+    private static Response response;
     private Method requestMethod;
 
     //BEGINNING OF BUILDER PATTERN
@@ -32,41 +36,48 @@ public class TrelloService implements ITrelloClass<Board> {
         private String cUrl = "";
 
         public ApiRequestBuilder setMethod (Method method){
+            System.out.println(method);
             requestMethod = method;
             return this;
         }
 
 
         public ApiRequestBuilder setBaseUrl(String url) {
-            cUrl.concat(url);
+
+            cUrl = cUrl.concat(url);
+            System.out.println(cUrl);
             return this;
         }
 
-        public ApRequestBuilder setAllBoards(String url) {
-            parameters.put(ParamNames.GET_ALL_BOARDS, url);
-            cUrl.concat(url);
+        public ApiRequestBuilder setAllBoards(String url) {
+            cUrl = cUrl.concat(url);
+            System.out.println(cUrl);
             return this;
         }
 
         public ApiRequestBuilder setOneBoard(String url) {
-            parameters.put(ParamNames.GET_ONE_BOARD, url);
-            cUrl.concat(url);
+            cUrl = cUrl.concat(url);
+            System.out.println(cUrl);
             return this;
         }
 
         public ApiRequestBuilder setKey(String key) {
-            parameters.put(ParamNames.KEY, key);
-            cUrl.concat(key);
+            cUrl = cUrl.concat(key);
+            System.out.println(cUrl);
             return this;
         }
 
         public ApiRequestBuilder setToken(String token) {
-            parameters.put(ParamNames.TOKEN, token);
-            cUrl.concat(token);
+            cUrl = cUrl.concat(token);
+            System.out.println(cUrl);
             return this;
         }
 
         public TrelloService buildRequest() {
+            System.out.println("---------------");
+            System.out.println(requestMethod);
+            System.out.println(cUrl);
+            System.out.println("---------------");
             return new TrelloService(requestMethod, cUrl);
         }
     }
@@ -77,5 +88,14 @@ public class TrelloService implements ITrelloClass<Board> {
         return RestAssured
                 .request(requestMethod , cUrl)
                 .prettyPeek();
+    }
+
+    public static List<Board> getAllBoards(Response response){
+        TrelloService.response = response;
+        List<Board> answers = new Gson()
+                .fromJson(response.asString().trim(), new TypeToken<List<Board>>() {
+                }.getType());
+        assertThat ("We expect to get one answer, but got " + answers.size(), answers, hasSize(1));
+        return answers;
     }
 }

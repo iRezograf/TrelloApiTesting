@@ -1,4 +1,4 @@
-package dataproviders;
+package providers;
 
 import java.io.FileInputStream;
 import java.io.IOException;

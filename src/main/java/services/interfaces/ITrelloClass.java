@@ -1,7 +1,6 @@
 package services.interfaces;
 
-import dataproviders.Dp;
-import dataproviders.Method;
+import providers.Dp;
 
 public interface ITrelloClass<T> {
     String KEY = Dp.getProperty("key");

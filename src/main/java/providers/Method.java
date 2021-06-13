@@ -1,4 +1,4 @@
-package dataproviders;
+package providers;
 
 public enum Method {
     GET,
