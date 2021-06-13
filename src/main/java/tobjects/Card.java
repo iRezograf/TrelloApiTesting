@@ -1,6 +1,9 @@
 package tobjects;
 
-public class Card extends DataClass<Card> {
+import java.util.Date;
+import java.util.List;
+
+public class Card {
     public String id, name, idList, desc, url, idBoard, idShort, idAttachmentCover,
             shortLink, shortUrl;
     public boolean closed, manualCoverAttachment, subscribed;
@@ -8,8 +11,8 @@ public class Card extends DataClass<Card> {
     public List<String> idMembers, idChecklists, idMembersVoted;
     public int pos;
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class CardCheckItem extends DataClass<CardCheckItem> {
+    //@JsonIgnoreProperties(ignoreUnknown = true)
+    public static class CardCheckItem {
         public String idCheckItem, state;
     }
 }
