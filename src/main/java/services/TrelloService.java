@@ -2,24 +2,25 @@ package services;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import entity.Board;
 import io.restassured.RestAssured;
+import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
-import services.interfaces.ITrelloClass;
-import tobjects.Board;
+import io.restassured.specification.ResponseSpecification;
+import org.apache.http.HttpStatus;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.lessThan;
 
-public class TrelloService implements ITrelloClass<Board> {
+public class TrelloService {
 
-    private static Response response;
-    private Method requestMethod;
+    private final Method requestMethod;
 
-    //BEGINNING OF BUILDER PATTERN
-    private String cUrl;
+    private final String cUrl;
 
     private TrelloService(Method method, String cUrl) {
 
@@ -36,53 +37,51 @@ public class TrelloService implements ITrelloClass<Board> {
         private String cUrl = "";
 
         public ApiRequestBuilder setMethod (Method method){
-            System.out.println(method);
             requestMethod = method;
             return this;
         }
 
 
         public ApiRequestBuilder setBaseUrl(String url) {
-
             cUrl = cUrl.concat(url);
-            System.out.println(cUrl);
             return this;
         }
 
         public ApiRequestBuilder setAllBoards(String url) {
             cUrl = cUrl.concat(url);
-            System.out.println(cUrl);
             return this;
         }
 
         public ApiRequestBuilder setOneBoard(String url) {
             cUrl = cUrl.concat(url);
-            System.out.println(cUrl);
+            return this;
+        }
+
+        public ApiRequestBuilder setId(String url) {
+            cUrl = cUrl.concat(url);
             return this;
         }
 
         public ApiRequestBuilder setKey(String key) {
             cUrl = cUrl.concat(key);
-            System.out.println(cUrl);
             return this;
         }
 
         public ApiRequestBuilder setToken(String token) {
             cUrl = cUrl.concat(token);
+            return this;
+        }
+
+        public ApiRequestBuilder setName(String name) {
+            cUrl = cUrl.concat(name);
             System.out.println(cUrl);
             return this;
         }
 
         public TrelloService buildRequest() {
-            System.out.println("---------------");
-            System.out.println(requestMethod);
-            System.out.println(cUrl);
-            System.out.println("---------------");
             return new TrelloService(requestMethod, cUrl);
         }
     }
-    //ENDING OF BUILDER PATTERN
-
 
     public Response sendRequest() {
         return RestAssured
@@ -91,11 +90,38 @@ public class TrelloService implements ITrelloClass<Board> {
     }
 
     public static List<Board> getAllBoards(Response response){
-        TrelloService.response = response;
-        List<Board> answers = new Gson()
+        return new Gson()
                 .fromJson(response.asString().trim(), new TypeToken<List<Board>>() {
                 }.getType());
-        assertThat ("We expect to get one answer, but got " + answers.size(), answers, hasSize(1));
-        return answers;
     }
+
+    public static String getAllBoardsAsString(Response response){
+        return new Gson()
+                .fromJson(response.asString().trim(), new TypeToken<String>() {
+                }.getType());
+    }
+
+    public static Board getBoard(Response response){
+        return new Gson()
+                .fromJson(response.asString().trim(), new TypeToken<Board>() {
+                }.getType());
+    }
+
+    public static List<String> getStringResult(Response response) {
+        return getAllBoards(response)
+                .stream()
+                .map(Board -> Board
+                        .name)
+                .collect(Collectors.toList());
+    }
+
+    public static ResponseSpecification responseAnalize() {
+        return new ResponseSpecBuilder()
+                .expectContentType(ContentType.JSON)
+                .expectResponseTime(lessThan(10000L))
+                .expectHeader("Access-Control-Allow-Methods","GET, PUT, POST, DELETE")
+                .expectStatusCode(HttpStatus.SC_OK)
+                .build();
+    }
+
 }

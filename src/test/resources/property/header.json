@@ -1,0 +1,40 @@
+HTTP/1.1 200 OK
+X-Dns-Prefetch-Control: off
+X-Frame-Options: DENY
+X-Download-Options: noopen
+X-Permitted-Cross-Domain-Policies: none
+Referrer-Policy: strict-origin-when-cross-origin
+Surrogate-Control: no-store
+Cache-Control: max-age=0, must-revalidate, no-cache, no-store
+Pragma: no-cache
+Expires: Thu, 01 Jan 1970 00:00:00
+X-Trello-Version: 1.2459.0
+X-Trello-Environment: Production
+Set-Cookie: dsc=f2c2e1b850ee0dd1dd705f619e5005e78c2595ac453e09e8c59fb30176d4e934; Path=/; Expires=Thu, 17 Jun 2021 16:16:28 GMT; Secure
+Set-Cookie: preAuthProps=s%3A60b8e676690044506242827e%3AisEnterpriseAdmin%3Dfalse.jwgAKjR4Bstp0ZttNXMX3bqMgQ6Fpv63S8nzdmn0sDA; Path=/
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, PUT, POST, DELETE
+Access-Control-Allow-Headers: Authorization, Accept, Content-Type
+Access-Control-Expose-Headers: x-rate-limit-api-key-interval-ms, x-rate-limit-api-key-max, x-rate-limit-api-key-remaining, x-rate-limit-api-token-interval-ms, x-rate-limit-api-token-max, x-rate-limit-api-token-remaining
+X-Rate-Limit-Api-Key-Interval-Ms: 10000
+X-Rate-Limit-Api-Key-Max: 300
+X-Rate-Limit-Api-Key-Remaining: 297
+X-Rate-Limit-Api-Token-Interval-Ms: 10000
+X-Rate-Limit-Api-Token-Max: 100
+X-Rate-Limit-Api-Token-Remaining: 97
+X-Rate-Limit-Member-Interval-Ms: 10000
+X-Rate-Limit-Member-Max: 200
+X-Rate-Limit-Member-Remaining: 197
+X-Server-Time: 1623687388047
+Content-Type: application/json; charset=utf-8
+Date: Mon, 14 Jun 2021 16:16:28 GMT
+Content-Encoding: gzip
+X-Envoy-Upstream-Service-Time: 122
+Expect-Ct: report-uri="https://web-security-reports.services.atlassian.com/expect-ct-report/trello-edge", max-age=86400
+X-Logging-Id: 7a01fdce-4547-49f0-9059-3b05dad7c9ba
+Strict-Transport-Security: max-age=63072000; preload
+X-Content-Type-Options: nosniff
+X-Xss-Protection: 1; mode=block
+Atl-Traceid: f19c3f8141f0d5e8
+Server: globaledge-envoy
+Transfer-Encoding: chunked

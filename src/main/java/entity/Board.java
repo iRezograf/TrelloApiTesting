@@ -1,9 +1,10 @@
-package tobjects;
+package entity;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 
 public class Board  {
     public String id, name, desc, idOrganization, url, shortUrl, shortLink;

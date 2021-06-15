@@ -1,7 +1,5 @@
 package utils;
 
-import tobjects.Board;
-
 public class TrelloDataGen {
 
         /*
