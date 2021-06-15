@@ -41,45 +41,44 @@ public class TrelloTests {
     public void allTest() {
 
         check200Ok();
-        allOfTheBoardsAssociatedWithMe();
-        testBoardsById();
-        Board board = createNewBoards();
 
-        deleteBoards(board.id);
+        allOfTheBoardsAssociatedWithMe();
+
+        testBoardsById();
+
+        Board board = createNewBoards(Dp.getProperty("boardName"));
+
+        //deleteBoards(board.id);
 
     }
+
 
     public void check200Ok() {
         requestBuilder()
                 .setMethod(Method.GET)
-                .setBaseUrl(Dp.getProperty("pathToTrello"))
-                .setAllBoards(Dp.getProperty("allBoards"))
+                .setUrl(Dp.getProperty("pathToTrello"))
+                .setUrl(Dp.getProperty("allBoards"))
                 .setKey(Dp.getProperty("key"))
                 .setToken(Dp.getProperty("token"))
                 .buildRequest()
                 .sendRequest()
                 .then().assertThat()
-                .spec(responseAnalize());
+                .spec(responseAnalise());
     }
-
 
     public void allOfTheBoardsAssociatedWithMe() {
 
         boards = getAllBoards(
                 requestBuilder()
                         .setMethod(Method.GET)
-                        .setBaseUrl(Dp.getProperty("pathToTrello"))
-                        .setAllBoards(Dp.getProperty("allBoards"))
+                        .setUrl(Dp.getProperty("pathToTrello"))
+                        .setUrl(Dp.getProperty("allBoards"))
                         .setKey(Dp.getProperty("key"))
                         .setToken(Dp.getProperty("token"))
                         .buildRequest()
                         .sendRequest());
         Assert.assertNotNull(boards);
-
-
     }
-
-
 
     public void testBoardsById() {
         for (Board board : boards) {
@@ -89,22 +88,15 @@ public class TrelloTests {
         }
     }
 
-
-    public Board createNewBoards() {
-        //RestAssured.request(Method.POST, "https://api.trello.com"
-        //        + "/1/boards/"
-        //        + "?key=15836217fb4d85ab9cd36070535d80ad
-        //        +  &token=81c5a186bf748c41b18f0083ab281febea2cdb6a0bd35131f0a4f4e1378269c4"
-        //        + "&name=Hello")
-        //        .prettyPeek();
+    public Board createNewBoards(String name) {
         Board board = getBoard(
                 requestBuilder()
                         .setMethod(Method.POST)
-                        .setBaseUrl(Dp.getProperty("pathToTrello"))
-                        .setAllBoards(Dp.getProperty("oneBoard"))
+                        .setUrl(Dp.getProperty("pathToTrello"))
+                        .setUrl(Dp.getProperty("oneBoard"))
                         .setKey(Dp.getProperty("key"))
                         .setToken(Dp.getProperty("token"))
-                        .setName(Dp.getProperty("boardName"))
+                        .setName(name)
                         .buildRequest()
                         .sendRequest());
 
@@ -117,19 +109,13 @@ public class TrelloTests {
         return board;
     }
 
-
     public void deleteBoards(String id) {
-        //DELETE \
-        //  --url 'https://api.trello.com
-        //  /1/boards/
-        //  {id}
-        //  ?key=0471642aefef5fa1fa76530ce1ba4c85&token=9eb76d9a9d02b8dd40c2f3e5df18556c831d4d1fadbe2c45f8310e6c93b5c548'
         Board actual = getBoard(
                 requestBuilder()
                         .setMethod(Method.DELETE)
-                        .setBaseUrl(Dp.getProperty("pathToTrello"))
-                        .setAllBoards(Dp.getProperty("oneBoard"))
-                        .setId(id)
+                        .setUrl(Dp.getProperty("pathToTrello"))
+                        .setUrl(Dp.getProperty("oneBoard"))
+                        .setUrl(id)
                         .setKey(Dp.getProperty("key"))
                         .setToken(Dp.getProperty("token"))
                         .buildRequest()
@@ -138,12 +124,12 @@ public class TrelloTests {
 
 
     public Board GetOneBoardById(String id) {
-            return  getBoard(
+            return getBoard(
                     requestBuilder()
                             .setMethod(Method.GET)
-                            .setBaseUrl(Dp.getProperty("pathToTrello"))
-                            .setOneBoard(Dp.getProperty("oneBoard"))
-                            .setId(id)
+                            .setUrl(Dp.getProperty("pathToTrello"))
+                            .setUrl(Dp.getProperty("oneBoard"))
+                            .setUrl(id)
                             .setKey(Dp.getProperty("key"))
                             .setToken(Dp.getProperty("token"))
                             .buildRequest()
