@@ -40,13 +40,13 @@ public class TrelloTests {
     @Test
     public void allTest() {
 
-        check200Ok();
+        //check200Ok();
 
-        allOfTheBoardsAssociatedWithMe();
+        //allOfTheBoardsAssociatedWithMe();
 
-        testBoardsById();
+        //testBoardsById();
 
-        Board board = createNewBoards(Dp.getProperty("boardName"));
+        createNewBoards(Dp.getProperty("boardName"));
 
         //deleteBoards(board.id);
 
@@ -88,8 +88,8 @@ public class TrelloTests {
         }
     }
 
-    public Board createNewBoards(String name) {
-        Board board = getBoard(
+    public void createNewBoards(String name) {
+        getBoard(
                 requestBuilder()
                         .setMethod(Method.POST)
                         .setUrl(Dp.getProperty("pathToTrello"))
@@ -100,13 +100,12 @@ public class TrelloTests {
                         .buildRequest()
                         .sendRequest());
 
-        Assert.assertNotNull(board);
+        //Assert.assertNotNull(board);
 
 
         //response.then()
         //        .assertThat()
         //        .spec(responseAnalize());
-        return board;
     }
 
     public void deleteBoards(String id) {

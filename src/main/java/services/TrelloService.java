@@ -27,7 +27,6 @@ public class TrelloService {
 
     private final Method requestMethod;
 
-    //BEGINNING OF BUILDER PATTERN
     private static Map<String, String> parameters;
     private String cUrl;
 
@@ -61,19 +60,16 @@ public class TrelloService {
         }
 
         public ApiRequestBuilder setKey(String key) {
-            //if (url.isEmpty()) {parameters.put(ParamNames.GET_ONE_BOARD, ParamNames.GET_ONE_BOARD);}
             parameters.put(ParamNames.KEY, key);
             return this;
         }
 
         public ApiRequestBuilder setToken(String token) {
-            //if (url.isEmpty()) {parameters.put(ParamNames.GET_ONE_BOARD, ParamNames.GET_ONE_BOARD);}
             parameters.put(ParamNames.TOKEN, token);
             return this;
         }
 
         public ApiRequestBuilder setName(String name) {
-            //if (url.isEmpty()) {parameters.put(ParamNames.GET_ONE_BOARD, ParamNames.GET_ONE_BOARD);}
             parameters.put(ParamNames.NAME, name);
             return this;
         }
@@ -82,14 +78,6 @@ public class TrelloService {
             return new TrelloService(requestMethod, parameters);
         }
     }
-    //ENDING OF BUILDER PATTERN
-
-
-    //public Response sendRequest() {
-    //    return RestAssured
-    //            .request(requestMethod , cUrl)
-    //            .prettyPeek();
-    //}
 
     public Response sendRequest() {
         return RestAssured
